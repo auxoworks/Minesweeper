@@ -24,11 +24,11 @@ for(int r=0; r<NUM_ROWS; r++){
     setBombs();
 }
 public void setBombs()
-{    
-    while(bombs.size()<5)
+{  
+    if(bombs.size()<40)
     {
-int r= 5;
-int c= 5;
+int r= (int)(Math.random()*20);
+int c= (int)(Math.random()*20);
 if (!bombs.contains(buttons[r][c]))
         {
     bombs.add(buttons[r][c]);
@@ -42,11 +42,7 @@ public void draw()
     background( 0 );
     if(isWon())
         displayWinningMessage();
-/*for(int x=0; x<rows*20; x+=20){
-    for(int y=0; y< columns*20; y+=20){
-        rect(x,y,40,40);
-    }
-}*/
+            setBombs();
 }
 public boolean isWon()
 {
@@ -55,7 +51,12 @@ public boolean isWon()
 }
 public void displayLosingMessage()
 {
-    //your code here
+    fill(0);
+    textSize(90);
+
+    text("You Lose", 200, 200);
+
+    textSize(10);
 }
 public void displayWinningMessage()
 {
@@ -83,6 +84,7 @@ public class MSButton
     }
     public boolean isMarked()
     {
+    
         return marked;
     }
     public boolean isClicked()
@@ -93,24 +95,52 @@ public class MSButton
     
     public void mousePressed () 
     {
+    
         clicked = true;
-        //your code here
+        if(keyPressed)
+            marked = !marked;
+        else if(countBombs(r,c) > 0)
+            label = "" + countBombs(r,c);
+        else
+        {
+           if(isValid(r-1,c) && !buttons[r-1][c].clicked)
+              buttons[r-1][c].mousePressed();
+           if(isValid(r+1,c) && !buttons[r+1][c].clicked)
+              buttons[r+1][c].mousePressed();
+           if(isValid(r,c-1) && !buttons[r][c-1].clicked)
+              buttons[r][c-1].mousePressed();
+           if(isValid(r,c+1) && !buttons[r][c+1].clicked)
+              buttons[r][c+1].mousePressed();
+           if(isValid(r-1,c+1) && !buttons[r-1][c+1].clicked)
+              buttons[r-1][c+1].mousePressed();
+           if(isValid(r+1,c+1) && !buttons[r+1][c+1].clicked)
+              buttons[r+1][c+1].mousePressed();
+           if(isValid(r-1,c-1) && !buttons[r-1][c-1].clicked)
+              buttons[r-1][c-1].mousePressed();
+           if(isValid(r+1,c-1) && !buttons[r+1][c-1].clicked)
+              buttons[r+1][c-1].mousePressed();
+        }
     }
 
     public void draw () 
     {    
         if (marked)
             fill(0);
-        else if( clicked && bombs.contains(this) ) 
+        else if( clicked && bombs.contains(this) ) {
+        displayLosingMessage();
              fill(255,0,0);
+         }
         else if(clicked)
             fill( 200 );
+        
         else 
             fill( 100 );
 
         rect(x, y, width, height);
         fill(0);
         text(label,x+width/2,y+height/2);
+
+
     }
     public void setLabel(String newLabel)
     {
@@ -118,16 +148,33 @@ public class MSButton
     }
     public boolean isValid(int r, int c)
     {
-        //your code here
+       if(r>=0&&r<NUM_ROWS&&c>=0&&c<NUM_COLS){
+        return true;
+    }
         return false;
     }
     public int countBombs(int row, int col)
     {
         int numBombs = 0;
-        //your code here
+        if(isValid(row-1,col) && bombs.contains(buttons[row-1][col]))
+            numBombs++;
+        if(isValid(row+1,col) && bombs.contains(buttons[row+1][col]))
+            numBombs++;
+        if(isValid(row-1,col-1) && bombs.contains(buttons[row-1][col-1]))
+            numBombs++;
+        if(isValid(row+1,col-1) && bombs.contains(buttons[row+1][col-1]))
+            numBombs++;
+        if(isValid(row,col-1) && bombs.contains(buttons[row][col-1]))
+            numBombs++;
+        if(isValid(row-1,col+1) && bombs.contains(buttons[row-1][col+1]))
+            numBombs++;
+        if(isValid(row+1,col+1) && bombs.contains(buttons[row+1][col+1]))
+            numBombs++;
+        if(isValid(row,col+1) && bombs.contains(buttons[row][col+1]))
+            numBombs++;
+
         return numBombs;
+
     }
 }
-
-
 
