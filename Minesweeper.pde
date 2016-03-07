@@ -1,4 +1,5 @@
 
+  
 
 import de.bezier.guido.*;
 //Declare and initialize NUM_ROWS and NUM_COLS = 20
@@ -32,10 +33,10 @@ int c= (int)(Math.random()*20);
 if (!bombs.contains(buttons[r][c]))
         {
     bombs.add(buttons[r][c]);
+  //  println(r + "," + c);
         }
     }
 }
-
 
 public void draw()
 {
@@ -53,7 +54,6 @@ public void displayLosingMessage()
 {
     fill(0);
     textSize(90);
-
     text("You Lose", 200, 200);
 
     textSize(10);
@@ -99,7 +99,7 @@ public class MSButton
         clicked = true;
         if(keyPressed)
             marked = !marked;
-        else if(countBombs(r,c) > 0)
+        else if(countBombs(r,c) > 0&&!bombs.contains(this))
             label = "" + countBombs(r,c);
         else
         {
@@ -127,12 +127,16 @@ public class MSButton
         if (marked)
             fill(0);
         else if( clicked && bombs.contains(this) ) {
+       
+        for (int r=0;r<20;r++)
+            for(int c=0;c<20;c++)
+                buttons[r][c].mousePressed();
         displayLosingMessage();
              fill(255,0,0);
          }
         else if(clicked)
             fill( 200 );
-        
+
         else 
             fill( 100 );
 
@@ -177,4 +181,3 @@ public class MSButton
 
     }
 }
-
