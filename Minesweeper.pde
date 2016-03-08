@@ -1,6 +1,3 @@
-
-  
-
 import de.bezier.guido.*;
 //Declare and initialize NUM_ROWS and NUM_COLS = 20
 private MSButton[][] buttons; //2d array of minesweeper buttons
@@ -26,7 +23,7 @@ for(int r=0; r<NUM_ROWS; r++){
 }
 public void setBombs()
 {  
-    if(bombs.size()<40)
+    if(bombs.size()<20)
     {
 int r= (int)(Math.random()*20);
 int c= (int)(Math.random()*20);
@@ -92,16 +89,27 @@ public class MSButton
         return clicked;
     }
     // called by manager
-    
+
     public void mousePressed () 
     {
-    
         clicked = true;
-        if(keyPressed)
+        if(keyPressed==true&&keyCode==' ')
+        { 
+            fill(0);
             marked = !marked;
-        else if(countBombs(r,c) > 0&&!bombs.contains(this))
+        }
+        if (bombs.contains(this)){
+            displayLosingMessage();
+
+        }
+        else if(countBombs(r,c)>0){
+            label=""+countBombs(r,c);
+        }
+        /*else if(countBombs(r,c) > 0&&!bombs.contains(this))
             label = "" + countBombs(r,c);
-        else
+*/
+
+            else
         {
            if(isValid(r-1,c) && !buttons[r-1][c].clicked)
               buttons[r-1][c].mousePressed();
@@ -128,7 +136,7 @@ public class MSButton
             fill(0);
         else if( clicked && bombs.contains(this) ) {
        
-        for (int r=0;r<20;r++)
+       for (int r=0;r<20;r++)
             for(int c=0;c<20;c++)
                 buttons[r][c].mousePressed();
         displayLosingMessage();
